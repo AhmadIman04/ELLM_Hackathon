@@ -35,6 +35,41 @@ async def login(req: LoginRequest):
         return {"success": True}
     else:
         return {"success": False}
+    
+
+
+class SignupRequest(BaseModel):
+    patientid: int
+    name: str
+    age: int
+    health_condition: str
+
+@app.post("/signup")
+async def signup(req: SignupRequest):
+    # Reference to patient_table
+    table_ref = db.reference('patient_table')
+    data = table_ref.get()
+
+    df = pd.DataFrame(data)
+
+    # 3c) Extract list of valid IDs
+    list_id = df["PatientID"].tolist()
+
+    if req.patientid in list_id :
+        return {"success":False, "message":"Registration Invalid"}
+
+    # Add new patient
+    new_patient = {
+        "PatientID": req.patientid,
+        "Patient Name": req.name,
+        "Age": req.age,
+        "Health Condition": req.health_condition
+    }
+    table_ref.push(new_patient)
+
+    return {"success": True, "message": "Patient registered successfully!"}
+    
+
 
 
 
