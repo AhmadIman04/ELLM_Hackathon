@@ -15,12 +15,12 @@ firebase_admin.initialize_app(cred, {
 
 # ——— 2) Define request model ———
 class LoginRequest(BaseModel):
-    drid: int
+    dremail: str
     password: str
 
 
-@app.post("/login")
-async def login(req: LoginRequest):
+@app.post("/login_doctor")
+async def login_doctor(req: LoginRequest):
     # 3a) Fetch patient_table
     table_ref = db.reference('dr_table')
     raw = table_ref.get()
@@ -36,46 +36,62 @@ async def login(req: LoginRequest):
     df = pd.DataFrame(records)
 
     # 3c) Extract list of valid IDs
-    list_id = df["DrID"].tolist()
+    list_email = df["Email"].tolist()
 
     # 3d) Check login
-    if req.password == "123" and req.drid in list_id:
+    if req.password == "123" and req.dremail in list_email:
         return {"success": True}
     else:
         return {"success": False}
     
 
 
-class SignupRequest(BaseModel):
-    patientid: int
+class SignupRequestDoctor(BaseModel):
+    email : str
     name: str
-    age: int
-    health_condition: str
+    password : str
 
-@app.post("/signup")
-async def signup(req: SignupRequest):
-    # Reference to patient_table
-    table_ref = db.reference('patient_table')
-    data = table_ref.get()
 
-    df = pd.DataFrame(data)
+@app.post("/signup_doctor")
+async def signup_doctor(req: SignupRequestDoctor):
+    table_ref = db.reference('dr_table')
+    raw = table_ref.get()
 
-    # 3c) Extract list of valid IDs
-    list_id = df["PatientID"].tolist()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
 
-    if req.patientid in list_id :
+
+    # 3) Turn into DataFrame
+    df = pd.DataFrame(records)
+    list_email = df["Email"].tolist()
+
+    dr_id = int(df["DrID"].max()) + 1
+
+    if req.email in list_email :
         return {"success":False, "message":"Registration Invalid"}
-
-    # Add new patient
-    new_patient = {
-        "PatientID": req.patientid,
-        "PatientName": req.name,
-        "Age": req.age,
-        "HealthCondition": req.health_condition
+    
+    new_dr = {
+        "DrName":req.name,
+        "Email":req.email,
+        "DrID":dr_id
     }
-    table_ref.push(new_patient)
 
-    return {"success": True, "message": "Patient registered successfully!"}
+    table_ref.push(new_dr)
+    return {"success": True, "message": "Doctor registered successfully!"}
+
+    
+    
+
+
+
+    
+
+
+
 
 
 
