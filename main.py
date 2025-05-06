@@ -1,9 +1,10 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI,Query
 from pydantic import BaseModel
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials, db 
 import pandas as pd
+import datetime
 
 app = FastAPI()
 
@@ -82,6 +83,67 @@ async def signup_doctor(req: SignupRequestDoctor):
 
     table_ref.push(new_dr)
     return {"success": True, "message": "Doctor registered successfully!"}
+
+
+
+@app.get("/get_diet_logs")
+async def get_diet_logs(patientid: int = Query(...)):
+    raw = db.reference("diet_logs").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+    df = pd.DataFrame(records)
+    df = df[df["PatientID"] == patientid]
+    return df.to_dict(orient="records")
+
+
+@app.get("/get_exercise_logs")
+async def get_exercise_logs(patientid: int = Query(...)):
+    raw = db.reference("exercise").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+    df = pd.DataFrame(records)
+    df = df[df["PatientID"] == patientid]
+    return df.to_dict(orient="records")
+
+
+
+class dietplaninput(BaseModel):
+    patientid: int
+    targetdailycalories : int
+    max_fat: int
+    max_sodium : int
+    max_sugar : int
+    Notes: str
+
+
+@app.post("/post_diet_plan")
+async def signup_doctor(req: dietplaninput):
+    table_ref = db.reference('diet_plan_settings')
+    #raw = table_ref.get()
+    new_diet_plan = {
+        "PatientID":req.patientid,
+        "Target_Daily_Calories":req.targetdailycalories,
+        "Max_Fat":req.max_fat,
+        "Max_Sodium":req.max_sodium,
+        "Max_Sugar":req.max_sugar,
+        "Notes": req.Notes
+    }
+
+    table_ref.push(new_diet_plan)
+    return {"success": True, "message": "New Diet Plan Updated"}
+
+
+
+
+
 
     
     
