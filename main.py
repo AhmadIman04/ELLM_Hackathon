@@ -123,7 +123,6 @@ class dietplaninput(BaseModel):
     max_sugar : int
     Notes: str
 
-
 @app.post("/post_diet_plan")
 async def signup_doctor(req: dietplaninput):
     table_ref = db.reference('diet_plan_settings')
@@ -139,6 +138,36 @@ async def signup_doctor(req: dietplaninput):
 
     table_ref.push(new_diet_plan)
     return {"success": True, "message": "New Diet Plan Updated"}
+
+@app.get("/get_patient")
+async def get_exercise_logs(drid: int = Query(...)):
+    raw = db.reference("dr_table").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df = pd.DataFrame(records)
+    df = df[df["DrID"] == drid]
+    patients = df.iloc[0]["PatientIDs"]
+
+    raw2 = db.reference("patient_table").get()
+
+    if isinstance(raw2, dict):
+        records2 = list(raw2.values())
+    elif isinstance(raw2, list):
+        records2 = raw2
+    else:
+        records2 = []
+
+    df2 = pd.DataFrame(records2)
+    df2 = df2[df2["PatientID"].isin(patients)]
+
+    return df2.to_dict(orient="records")
+
+
 
 
 
