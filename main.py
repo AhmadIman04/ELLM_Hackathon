@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 import firebase_admin
@@ -76,8 +77,6 @@ async def signup(req: SignupRequest):
 
     return {"success": True, "message": "Patient registered successfully!"}
 
-
-    
 
 
 
