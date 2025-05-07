@@ -7,7 +7,7 @@ import pandas as pd
 import datetime
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
-
+from fastapi import HTTPException
 
 
 app = FastAPI()
@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 # ——— 1) Initialize Firebase Admin (do this once) ———
-cred = credentials.Certificate('credentials.json')
+cred = credentials.Certificate('credentials2.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://ellm-hackathon-default-rtdb.asia-southeast1.firebasedatabase.app/'
 })
@@ -154,6 +154,43 @@ async def post_diet_plan(req: dietplaninput):
 
     table_ref.push(new_diet_plan)
     return {"success": True, "message": "New Diet Plan Updated"}
+
+@app.put("/update_diet_plan")
+async def upsert_diet_plan(req: dietplaninput):
+    ref = db.reference('diet_plan_settings')
+
+    # 1) Pull down all entries
+    all_plans = ref.get() or {}
+
+    # 2) Find the key for this patient, if it exists
+    matching_key = None
+    for key, plan in all_plans.items():
+        # plan might be None if someone deleted it; guard against that
+        if isinstance(plan, dict) and plan.get("PatientID") == req.patientid:
+            matching_key = key
+            break
+
+    # 3) Prepare the data you want to write
+    data_to_write = {
+        "PatientID": req.patientid,
+        "Target_Daily_Calories": req.targetdailycalories,
+        "Max_Fat": req.max_fat,
+        "Max_Sodium": req.max_sodium,
+        "Max_Sugar": req.max_sugar,
+        "Notes": req.Notes
+    }
+
+    # 4) Update if found, otherwise push new
+    try:
+        if matching_key:
+            ref.child(matching_key).update(data_to_write)
+            return {"success": True, "message": "Diet plan updated for patient"}
+        else:
+            ref.push(data_to_write)
+            return {"success": True, "message": "Diet plan created for patient"}
+    except Exception as e:
+        # Wrap any Firebase errors in a 500
+        raise HTTPException(status_code=500, detail=f"Firebase error: {e}")
 
 @app.get("/get_diet_plan")
 async def get_diet_plan(patientid: int = Query(...)):
