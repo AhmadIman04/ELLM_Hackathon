@@ -155,6 +155,22 @@ async def post_diet_plan(req: dietplaninput):
     table_ref.push(new_diet_plan)
     return {"success": True, "message": "New Diet Plan Updated"}
 
+@app.get("/get_diet_plan")
+async def get_diet_plan(patientid: int = Query(...)):
+    raw = db.reference("diet_plan_settings").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df = pd.DataFrame(records)
+    df = df[df["PatientID"] == patientid]
+    return df.to_dict(orient="records")
+
+
+
 @app.get("/get_patient_dr")
 async def get_patient_by_drid(drid: int = Query(...)):
     raw = db.reference("dr_table").get()
