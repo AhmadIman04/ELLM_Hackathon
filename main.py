@@ -238,6 +238,7 @@ async def get_patient_by_id(id: int = Query(...)):
         records = []
 
     df = pd.DataFrame(records)
+    df=df[df["PatientID"]==id]
  
 
     df2=df.copy()
