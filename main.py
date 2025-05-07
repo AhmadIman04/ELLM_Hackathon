@@ -5,8 +5,20 @@ import firebase_admin
 from firebase_admin import credentials, db 
 import pandas as pd
 import datetime
+from fastapi.middleware.cors import CORSMiddleware
+import numpy as np
+
+
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or specify your frontend URL like ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ——— 1) Initialize Firebase Admin (do this once) ———
 cred = credentials.Certificate('credentials.json')
@@ -35,14 +47,13 @@ async def login_doctor(req: LoginRequest):
 
     # 3) Turn into DataFrame
     df = pd.DataFrame(records)
-    
 
-    # 3c) Extract list of valid IDs
-    list_email = df["Email"].tolist()
-
-    # 3d) Check login
-    if req.password == "123" and req.dremail in list_email:
-        return {"success": True}
+    # 3) Check if doctor exists and password is correct
+    doctor_row = df[df["Email"] == req.dremail]
+    if not doctor_row.empty and req.password == "123":
+        # Convert the matching row to a dictionary
+        doctor_data = doctor_row.iloc[0].to_dict()
+        return {"success": True, **doctor_data}
     else:
         return {"success": False}
     
@@ -96,8 +107,12 @@ async def get_diet_logs(patientid: int = Query(...)):
         records = raw
     else:
         records = []
+
     df = pd.DataFrame(records)
     df = df[df["PatientID"] == patientid]
+    #print(records)
+    #print(df)
+    #print(df.columns)
     return df.to_dict(orient="records")
 
 
@@ -209,6 +224,26 @@ async def get_patient_by_drid(drid: int = Query(...)):
     df2["Last Activity"]=latest_log_arr
 
     return df2.to_dict(orient="records")
+
+
+@app.get("/get_patient_by_id")
+async def get_patient_by_id(id: int = Query(...)):
+    raw = db.reference("patient_table").get()
+
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df = pd.DataFrame(records)
+    df = df[df["PatientID"] == id]
+
+    if df.empty:
+        return {"error": "Patient not found"}
+
+    return df.iloc[0].to_dict()
 
 
 
