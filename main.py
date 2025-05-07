@@ -140,8 +140,8 @@ async def signup_doctor(req: dietplaninput):
     table_ref.push(new_diet_plan)
     return {"success": True, "message": "New Diet Plan Updated"}
 
-@app.get("/get_patient")
-async def get_exercise_logs(drid: int = Query(...)):
+@app.get("/get_patient_dr")
+async def get_patient_by_drid(drid: int = Query(...)):
     raw = db.reference("dr_table").get()
     if isinstance(raw, dict):
         records = list(raw.values())
