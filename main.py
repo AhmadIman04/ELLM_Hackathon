@@ -238,12 +238,58 @@ async def get_patient_by_id(id: int = Query(...)):
         records = []
 
     df = pd.DataFrame(records)
-    df = df[df["PatientID"] == id]
+ 
 
-    if df.empty:
+    df2=df.copy()
+
+    latest_log_arr = []
+    for i in range (len(df2)):
+        patient_id = df2.iloc[i]["PatientID"]
+        diet_log = db.reference('diet_logs')
+        raw = diet_log.get()
+        # 2) Normalize into a list of dicts
+        if isinstance(raw, dict):
+            records = list(raw.values())
+        elif isinstance(raw, list):
+            records = raw
+        else:
+            records = []
+
+        # 3) Turn into DataFrame
+        df_dietlog = pd.DataFrame(records)
+        df_dietlog = df_dietlog[df_dietlog["PatientID"]==patient_id]
+        df_dietlog["datetime"]= pd.to_datetime(df_dietlog["datetime"])
+        latest_log_diet  = df_dietlog["datetime"].max()
+
+        exercise_log = db.reference('exercise')
+        raw = exercise_log.get()
+        # 2) Normalize into a list of dicts
+        if isinstance(raw, dict):
+            records = list(raw.values())
+        elif isinstance(raw, list):
+            records = raw
+        else:
+            records = []
+
+        df_exerciselog = pd.DataFrame(records)
+        df_exerciselog = df_exerciselog[df_exerciselog["PatientID"]==patient_id]
+        df_exerciselog["Datetime"]= pd.to_datetime(df_exerciselog["Datetime"])
+        latest_log_exercise  = df_exerciselog["Datetime"].max()
+
+        if(latest_log_diet>latest_log_exercise):
+            latest_log_arr.append(latest_log_diet)
+        else:
+            latest_log_arr.append(latest_log_exercise) 
+
+    df2["Last Activity"]=latest_log_arr
+
+
+    if df2.empty:
         return {"error": "Patient not found"}
+    
+    
 
-    return df.iloc[0].to_dict()
+    return df2.iloc[0].to_dict()
 
 
 
