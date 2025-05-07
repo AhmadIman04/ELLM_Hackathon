@@ -125,7 +125,7 @@ class dietplaninput(BaseModel):
     Notes: str
 
 @app.post("/post_diet_plan")
-async def signup_doctor(req: dietplaninput):
+async def post_diet_plan(req: dietplaninput):
     table_ref = db.reference('diet_plan_settings')
     #raw = table_ref.get()
     new_diet_plan = {
