@@ -78,7 +78,6 @@ async def signup_doctor(req: SignupRequestDoctor):
     else:
         records = []
 
-
     # 3) Turn into DataFrame
     df = pd.DataFrame(records)
     list_email = df["Email"].tolist()
@@ -133,7 +132,6 @@ async def get_total_log_entries(drid: int = Query(...)):
         records = raw
     else:
         records = []
-
     df3 = pd.DataFrame(records)
     df3 = df3[df3["PatientID"].isin(patients)]
     print(df3)
@@ -143,9 +141,46 @@ async def get_total_log_entries(drid: int = Query(...)):
     
     return {"Total Log Entries":total_logs}
 
+@app.get("/get_latest_log_entries")
+async def get_latest_log_entries(drid: int = Query(...)):
+    raw = db.reference("dr_table").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
 
+    df = pd.DataFrame(records)
+    df = df[df["DrID"] == drid]
+    patients = df.iloc[0]["PatientIDs"]
+    print(patients)
+
+    raw = db.reference("diet_logs").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df2 = pd.DataFrame(records)
+    df2 = df2[df2["PatientID"].isin(patients)]
+    df2["datetime"]= pd.to_datetime(df2["datetime"])
+
+    # Grab the 4 rows with the largest datetime values
+    top4 = df2.nlargest(4, "datetime")
+
+    return top4.to_dict(orient="records")
+
+    #print(df2)
 
     
+    
+
+    
+    
+
 
 
 
