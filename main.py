@@ -374,7 +374,7 @@ async def get_patient_by_drid(drid: int = Query(...)):
         else:
             latest_log_arr.append(latest_log_exercise) 
 
-    df2["Last_Activity"]=latest_log_arr
+    df2["Last_Activity"]=latest_log_diet
 
     return df2.to_dict(orient="records")
 
