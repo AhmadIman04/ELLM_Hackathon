@@ -433,7 +433,7 @@ async def get_patient_by_id(id: int = Query(...)):
         if(latest_log_diet>latest_log_exercise):
             latest_log_arr.append(latest_log_diet)
         else:
-            latest_log_arr.append(latest_log_exercise) 
+            latest_log_arr.append(latest_log_diet) 
 
     df2["Last Activity"]=latest_log_arr
 
