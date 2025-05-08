@@ -171,15 +171,29 @@ async def get_latest_log_entries(drid: int = Query(...)):
     # Grab the 4 rows with the largest datetime values
     top4 = df2.nlargest(4, "datetime")
 
-    return top4.to_dict(orient="records")
+    #print(top4)
+
+    raw = db.reference("patient_table").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df3 = pd.DataFrame(records)
+    df3=df3[["PatientID","PatientName"]]
+    
+
+    df_merged = pd.merge(top4,df3,how='inner')
+    #print(df_merged)
+
+    return df_merged.to_dict(orient="records")
+
+    
 
     #print(df2)
 
-    
-    
-
-    
-    
 
 
 
