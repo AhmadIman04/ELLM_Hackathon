@@ -126,7 +126,7 @@ async def get_total_log_entries(drid: int = Query(...)):
     print(df2)
     total_diet_logs = df2.shape[0]
 
-    raw = db.reference("exercise").get()
+    raw = db.reference("steps_table").get()
     if isinstance(raw, dict):
         records = list(raw.values())
     elif isinstance(raw, list):
