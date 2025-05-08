@@ -377,6 +377,36 @@ async def get_average_nutrients(patientid: int = Query(...)):
 
     return result
 
+@app.get("/get_nutrient_trend")
+async def get_nutrient_trend(patientid: int = Query(...)):
+    raw = db.reference("diet_logs").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+    df = pd.DataFrame(records)
+    df = df[df["PatientID"] == patientid]
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    df['date'] = df['datetime'].dt.date
+    print(df)
+    grouped_by_df = df.groupby('date')[[
+    'sodium_intake',
+    'sugar_intake',
+    'fat_intake',
+    'calorie_intake'
+    ]].mean()
+    
+    trend = grouped_by_df.reset_index().to_dict(orient='records')
+
+    return {
+        "patientid": patientid,
+        "trend": trend
+    }
+
+
+
 def estimate_calories_burned(steps: int) -> float:
     # Base calories burned
     base_rate = 0.05  # kcal per step
