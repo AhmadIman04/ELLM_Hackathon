@@ -340,10 +340,43 @@ async def get_patient_by_id(id: int = Query(...)):
 
     if df2.empty:
         return {"error": "Patient not found"}
-    
-    
-
     return df2.iloc[0].to_dict()
+
+
+@app.get("/get_average_nutrients")
+async def get_average_nutrients(patientid: int = Query(...)):
+    raw = db.reference("diet_logs").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df = pd.DataFrame(records)
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    df['date'] = df['datetime'].dt.date
+    df = df[df["PatientID"] == patientid]
+
+    days = len(df["date"].unique())
+
+    print(days)
+
+    avg_calorie = df["calorie_intake"].sum()/days
+    avg_fat = df["fat_intake"].sum()/days
+    avg_sodium = df["sodium_intake"].sum()/days
+    avg_sugar = df["sugar_intake"].sum()/days
+
+    result = {
+    "avg_calorie(kcal)": round(float(avg_calorie),2) if not pd.isna(avg_calorie) else 0.0,
+    "avg_fat(g)"       : round(float(avg_fat), 2)     if not pd.isna(avg_fat)     else 0.0,
+    "avg_sodium(g)"    : round(float(avg_sodium), 2)  if not pd.isna(avg_sodium)  else 0.0,
+    "avg_sugar(g)"     : round(float(avg_sugar), 2)   if not pd.isna(avg_sugar)   else 0.0,
+    }
+
+    return result
+
+
 
 
 
