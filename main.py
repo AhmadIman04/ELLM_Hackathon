@@ -8,6 +8,7 @@ import datetime
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 from fastapi import HTTPException
+import random
 
 
 app = FastAPI()
@@ -375,6 +376,51 @@ async def get_average_nutrients(patientid: int = Query(...)):
     }
 
     return result
+
+def estimate_calories_burned(steps: int) -> float:
+    # Base calories burned
+    base_rate = 0.05  # kcal per step
+    base_cal = steps * base_rate
+
+    # Add a random variation of ±10%
+    variation = random.uniform(-0.1, 0.1)  # ±10%
+    calories = base_cal * (1 + variation)
+    # Round to two decimals and ensure non-negative
+    return round(max(calories, 0), 2)
+
+
+def estimate_distance_km(steps: int) -> float:
+    base_stride_km = 0.00078  # kilometers per step
+    base_distance = steps * base_stride_km
+
+    # Add a random variation of ±10%
+    variation = random.uniform(-0.1, 0.1)  # ±10%
+    distance_km = base_distance * (1 + variation)
+
+    # Round to three decimals and ensure non-negative
+    return round(max(distance_km, 0), 3)
+
+
+@app.get("/get_steps")
+async def get_steps(patientid: int = Query(...)):
+    raw = db.reference("steps_table").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+    df = pd.DataFrame(records)
+    df = df[df["PatientID"] == patientid]
+
+    df["Calories_Burned"] = df["NumberOfSteps"].apply(estimate_calories_burned)
+
+    # Create Total_Distance column
+    df["Total_Distance_km"] = df["NumberOfSteps"].apply(estimate_distance_km)
+
+    # Now df has your two new columns
+    return df.to_dict(orient="records")
+
 
 
 
