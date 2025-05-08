@@ -98,6 +98,56 @@ async def signup_doctor(req: SignupRequestDoctor):
     return {"success": True, "message": "Doctor registered successfully!"}
 
 
+@app.get("/get_total_log_entries")
+async def get_total_log_entries(drid: int = Query(...)):
+    raw = db.reference("dr_table").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df = pd.DataFrame(records)
+    df = df[df["DrID"] == drid]
+    patients = df.iloc[0]["PatientIDs"]
+    print(patients)
+
+    raw = db.reference("diet_logs").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df2 = pd.DataFrame(records)
+    df2 = df2[df2["PatientID"].isin(patients)]
+    print(df2)
+    total_diet_logs = df2.shape[0]
+
+    raw = db.reference("exercise").get()
+    if isinstance(raw, dict):
+        records = list(raw.values())
+    elif isinstance(raw, list):
+        records = raw
+    else:
+        records = []
+
+    df3 = pd.DataFrame(records)
+    df3 = df3[df3["PatientID"].isin(patients)]
+    print(df3)
+    total_exercise_logs = df3.shape[0]
+
+    total_logs = total_diet_logs + total_exercise_logs
+    
+    return {"Total Log Entries":total_logs}
+
+
+
+    
+
+
 
 @app.get("/get_diet_logs")
 async def get_diet_logs(patientid: int = Query(...)):
@@ -397,7 +447,7 @@ async def get_nutrient_trend(patientid: int = Query(...)):
     'fat_intake',
     'calorie_intake'
     ]].mean()
-    
+
     trend = grouped_by_df.reset_index().to_dict(orient='records')
 
     return {
@@ -450,6 +500,8 @@ async def get_steps(patientid: int = Query(...)):
 
     # Now df has your two new columns
     return df.to_dict(orient="records")
+
+
 
 
 

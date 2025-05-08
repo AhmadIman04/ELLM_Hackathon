@@ -28,11 +28,13 @@ afzalcode.py
 .gitignore
 Test.csv
 main.py
+__pycache__
 __pycache__/code_hafiz.cpython-311.pyc
 phone_main.py
 __pycache__/main.cpython-311.pyc
 code_hafiz.py
 __pycache__/main.cpython-311.pyc
 __pycache__/phone_main.cpython-311.pyc
+__pycache__/main.cpython-311.pyc
 __pycache__/main.cpython-311.pyc
 __pycache__/main.cpython-311.pyc
