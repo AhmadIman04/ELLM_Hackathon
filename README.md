@@ -148,3 +148,70 @@ Both apps use Firebase’s realtime sync ➜ providing instant, seamless updates
 | **AI Integration** | Gemini APIs (via Backend)        |
 
 
+
+## 🤖 LLM Architecture Overview
+
+AI functionality in this system is divided into **two core tasks**:  
+- 🥗 **Meal Analysis** (using multimodal input)  
+- 💬 **Personalized Chatbot Interactions**  
+
+Both are powered by **Google’s Gemini models** and integrated through the FastAPI backend, which handles context building and API communication.
+
+---
+
+### 🥗 Meal Analysis (Multimodal Inference Flow)
+
+1. **Patient uploads meal photo**  
+   The mobile app sends the image to the backend via FastAPI.  
+
+2. **Forward to Gemini 2.0 Flash**  
+   The backend calls Gemini’s multimodal model, which can analyze the image and return structured nutritional data.
+
+3. **AI estimates nutritional values**  
+   - 🔥 **Calories**  
+   - 🍬 **Sugar content**  
+   - 🥓 **Fat content**  
+   - 🧂 **Sodium levels**  
+
+4. **Parse and store results**  
+   The backend processes the AI response and writes the estimated values into the patient’s record in **Firebase Realtime Database**.
+
+5. **Real-time updates**  
+   Both the patient’s app and doctor’s dashboard reflect the new meal data instantly, thanks to Firebase’s sync mechanism.
+
+> ✅ This architecture hides the AI model complexity from front-end apps while keeping updates **fast** and **real-time**.
+
+---
+
+### 💬 Chatbot Personalization (LLM with Contextual Data Flow)
+
+1. **Patient sends chatbot query**  
+   The user types a question (e.g., "Can I have dessert today?") in the app’s chat interface.
+
+2. **Backend gathers live patient data**  
+   From Firebase, the backend fetches:  
+   - 📊 **Current consumption stats:** calories, sugar, fat, sodium  
+   - 🚶‍♂️ **Step counts & calories burned**  
+   - ⚙️ **Doctor-set nutritional limits**  
+
+3. **Build enriched prompt**  
+   The backend combines the user’s query with their latest health data to form a rich, context-aware prompt.
+
+4. **Call Gemini text model API**  
+   This prompt is sent to Gemini’s LLM, which returns a **personalized** and **safe** response tailored to the patient’s condition.
+
+5. **Return and display response**  
+   The chatbot reply is delivered back to the app’s chat window, ready for the user to read and act on.
+
+> 🔒 By using real-time health data and doctor-defined limits, every chatbot reply stays **relevant** and **clinically safe** for the patient.
+
+---
+
+## 🛠️ Why This Design?
+
+- **Seamless updates**: Meal data and chatbot answers reflect the patient’s **real-time health status**.
+- **Scalable**: Front-end apps stay lightweight—heavy AI processing is handled server-side.
+- **Safe & personalized**: AI replies always consider the patient’s latest condition and doctor’s advice.
+
+
+
