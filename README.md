@@ -190,8 +190,8 @@ Both are powered by **Google’s Gemini models** and integrated through the Fast
 
 2. **Backend gathers live patient data**  
    From Firebase, the backend fetches:  
-   - 📊 **Current consumption stats:** calories, sugar, fat, sodium  
-   - 🚶‍♂️ **Step counts & calories burned**  
+   - 🍬 **Current consumption stats:** calories, sugar, fat, sodium  
+   - 📊 **Patient's current health data**  
    - ⚙️ **Doctor-set nutritional limits**  
 
 3. **Build enriched prompt**  
