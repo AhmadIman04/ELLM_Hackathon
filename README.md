@@ -35,8 +35,7 @@ Built with **React Native** (iOS & Android), the patient app empowers users to:
    On launch—or whenever they change—the mobile app retrieves the latest targets.  
 4. **Display in UI**  
    The patient sees these limits on the home screen, with progress bars for each nutrient.  
-5. **Real-time alerts**  
-   As intake approaches a threshold (e.g. 90%), the app highlights that nutrient to keep the patient informed.
+
 
 ---
 ---
@@ -44,7 +43,7 @@ Built with **React Native** (iOS & Android), the patient app empowers users to:
 ### 📸 Upload Meal Photos for Nutritional Analysis Flow
 
 1. **Launch picker**  
-   User taps the “📸” icon to open the camera or gallery.  
+   User taps the food log section to open the camera or gallery.  
 2. **Preprocess on-device**  
    Image is resized/compressed for optimal upload.  
 3. **Secure upload**  
@@ -61,17 +60,13 @@ Built with **React Native** (iOS & Android), the patient app empowers users to:
 ### 🤖 Chat with a Personalized AI Assistant Flow
 
 1. **Open chat**  
-   Tap the “🤖” icon to launch the AI assistant.  
+   Tap the AI chatbot icon to launch the AI assistant.  
 2. **Send query**  
-   Type a question (e.g. “Snack under 150 cal?”) or choose from prompts.  
+   Type a question (e.g. “What should i eat for dinner?”) .  
 3. **Route to backend**  
    FastAPI forwards the message plus patient context to Gemini.  
 4. **Receive response**  
    Gemini returns tailored advice or suggestions.  
-5. **Log conversation**  
-   All messages are saved in Firebase for continuity.  
-6. **Display & quick actions**  
-   Show AI reply with buttons like “Log that meal” or “Show recipes.”
 
 ---
 
