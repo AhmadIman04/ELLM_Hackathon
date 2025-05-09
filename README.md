@@ -3,6 +3,11 @@
 
 # 🏥 Stellgin 
 
+## What is Stellgin
+This app called Stellgin is a personalized health management system designed for patients with diet-related conditions like obesity, hypertension, and diabetes. It helps patients track their meals, steps, and calorie intake in real time, while enabling doctors to monitor their progress, set consumption limits, and provide tailored dietary advice through a connected dashboard and AI-powered chatbot.
+
+## Technical Architecture
+
 This project consists of **two main user-facing systems** connected through a shared backend and real-time database:
 
 * 📱 **Mobile App** for Patients
