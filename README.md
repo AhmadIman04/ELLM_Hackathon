@@ -1,7 +1,7 @@
 
 
 
-# 🏥 Health Tracking System — Technical Architecture Overview
+# 🏥 Stellgin — Technical Architecture Overview
 
 This project consists of **two main user-facing systems** connected through a shared backend and real-time database:
 
