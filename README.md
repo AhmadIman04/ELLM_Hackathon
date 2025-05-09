@@ -1,7 +1,7 @@
 
 
 
-# 🏥 Stellgin — Technical Architecture Overview
+# 🏥 Stellgin 
 
 This project consists of **two main user-facing systems** connected through a shared backend and real-time database:
 
