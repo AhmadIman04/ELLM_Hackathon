@@ -15,24 +15,90 @@ AI components powered by Google’s **Gemini models** are integrated through the
 
 ## 📱 Mobile App (Patients)
 
-Built with **React Native** (supports both iOS & Android), the patient app empowers users to:
+Built with **React Native** (iOS & Android), the patient app empowers users to:
 
-* 📊 **View daily nutritional limits** (set by their doctor)
-* 📸 **Upload meal photos** for nutritional analysis
-* 🤖 **Chat with a personalized AI assistant**
-* 🚶‍♂️ **Track daily physical activity** via built-in step tracker
+- 📊 **View daily nutritional limits** (set by their doctor)  
+- 📸 **Upload meal photos** for nutritional analysis  
+- 🤖 **Chat with a personalized AI assistant**  
+- 🚶‍♂️ **Track daily physical activity** via built-in step tracker
+- 📈 **Real-Time Dashboard Flow**
 
-### 🥗 Meal Tracking Flow:
+---
 
-1. Patient captures a meal photo in the app.
-2. Image is uploaded to the backend for analysis.
-3. Estimated nutritional data (calories, sugar, fat, sodium) is processed and stored in Firebase.
-4. Real-time updates are sent back to both the patient app and doctor dashboard.
+### 📊 View Daily Nutritional Limits Flow
 
-### 🚶‍♀️ Activity Tracking:
+1. **Doctor configures limits**  
+   In the doctor’s dashboard, the physician sets or adjusts the patient’s daily targets for calories, sugar, fat, and sodium.  
+2. **Firebase sync**  
+   Limits are pushed instantly to Firebase Realtime Database.  
+3. **App fetches limits**  
+   On launch—or whenever they change—the mobile app retrieves the latest targets.  
+4. **Display in UI**  
+   The patient sees these limits on the home screen, with progress bars for each nutrient.  
+5. **Real-time alerts**  
+   As intake approaches a threshold (e.g. 90%), the app highlights that nutrient to keep the patient informed.
 
-* The step tracker counts daily steps ➜ converts to distance and **calories burned**.
-* Synced instantly to Firebase so doctors can monitor patient activity in real time.
+---
+---
+
+### 📸 Upload Meal Photos for Nutritional Analysis Flow
+
+1. **Launch picker**  
+   User taps the “📸” icon to open the camera or gallery.  
+2. **Preprocess on-device**  
+   Image is resized/compressed for optimal upload.  
+3. **Secure upload**  
+   Sent via FastAPI with authentication tokens.  
+4. **Backend AI call**  
+   Gemini processes the image and returns nutritional estimates.  
+5. **Write to Firebase**  
+   Results are stored under the patient’s record.  
+6. **Update UI & history**  
+   App displays values and logs the meal in the consumption history.
+
+---
+
+### 🤖 Chat with a Personalized AI Assistant Flow
+
+1. **Open chat**  
+   Tap the “🤖” icon to launch the AI assistant.  
+2. **Send query**  
+   Type a question (e.g. “Snack under 150 cal?”) or choose from prompts.  
+3. **Route to backend**  
+   FastAPI forwards the message plus patient context to Gemini.  
+4. **Receive response**  
+   Gemini returns tailored advice or suggestions.  
+5. **Log conversation**  
+   All messages are saved in Firebase for continuity.  
+6. **Display & quick actions**  
+   Show AI reply with buttons like “Log that meal” or “Show recipes.”
+
+---
+
+### 🚶‍♀️ Activity Tracking Flow
+
+1. **Count steps**  
+   Built-in tracker tallies daily steps.  
+2. **Convert metrics**  
+   Steps → distance → estimated calories burned.  
+3. **Sync to Firebase**  
+   Activity data is pushed in real time.  
+4. **Doctor visibility**  
+   Doctors can monitor patient activity live via the web dashboard.
+   
+
+### 📈 Real-Time Dashboard Flow
+
+1. **Initialize dashboard component**  
+   - When the patient opens the dashboard section, the app initializes real-time listeners to Firestore.
+
+2. **Subscribe to Firestore data**  
+   - **Activity data:** steps, distance, calories burned  
+   - **Diet data:** meal records with calories, sugar, fat, sodium  
+
+3. **Aggregate metrics**  
+   - Compute daily totals and weekly summaries for both activity and diet.
+
 
 ---
 
