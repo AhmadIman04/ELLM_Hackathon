@@ -6,9 +6,7 @@
 
 ## UI Snippets
 ### Mobile Application (Patients Side)
-![user dashboard (real)](https://github.com/user-attachments/assets/b784a92e-e0cb-4428-9a1b-cab63b253fe5)
-![upload_image](https://github.com/user-attachments/assets/a7923fa4-7603-4f2e-a64b-51417f0abe90)
-![chatbot upload from phone](https://github.com/user-attachments/assets/3d156566-d7a5-426a-a848-0f74b1940d3a)
+![user dashboard (real)](https://github.com/user-attachments/assets/b784a92e-e0cb-4428-9a1b-cab63b253fe5) ![upload_image](https://github.com/user-attachments/assets/a7923fa4-7603-4f2e-a64b-51417f0abe90) ![chatbot upload from phone](https://github.com/user-attachments/assets/3d156566-d7a5-426a-a848-0f74b1940d3a)
 ![chatbot can i eat this](https://github.com/user-attachments/assets/8cf6cd1b-cc56-4c12-a73a-2b3fa4d7a2a1)
 ![what should i eat for dinner](https://github.com/user-attachments/assets/2864522d-e78e-480c-92f8-9581c5972093)
 ![chat_history](https://github.com/user-attachments/assets/39be163f-29e8-4fdb-adf2-2e4e8a60a923)
