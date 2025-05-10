@@ -2,6 +2,31 @@
 
 
 # 🏥 Stellgin 
+![Stellgin intro](https://github.com/user-attachments/assets/ca08a2bd-3bc7-461b-8f7e-b79ada56f7da)
+
+## UI Snippets
+### Mobile Application (Patients Side)
+![user dashboard (real)](https://github.com/user-attachments/assets/b784a92e-e0cb-4428-9a1b-cab63b253fe5)
+![upload_image](https://github.com/user-attachments/assets/a7923fa4-7603-4f2e-a64b-51417f0abe90)
+![chatbot upload from phone](https://github.com/user-attachments/assets/3d156566-d7a5-426a-a848-0f74b1940d3a)
+![chatbot can i eat this](https://github.com/user-attachments/assets/8cf6cd1b-cc56-4c12-a73a-2b3fa4d7a2a1)
+![what should i eat for dinner](https://github.com/user-attachments/assets/2864522d-e78e-480c-92f8-9581c5972093)
+![chat_history](https://github.com/user-attachments/assets/39be163f-29e8-4fdb-adf2-2e4e8a60a923)
+![Progress_bar_intake](https://github.com/user-attachments/assets/85efb3a6-99b2-4599-88a5-71a790bfc4f1)
+![progress_bar_steps](https://github.com/user-attachments/assets/8af15b63-453d-4ad3-8b5c-63227ed9a18b)
+![settings](https://github.com/user-attachments/assets/cb0f0f73-0353-44c4-bddd-7c4a2964832d)
+![profile](https://github.com/user-attachments/assets/46d120fe-77ee-424c-a47e-db7896e617c2)
+
+
+
+
+
+
+
+
+
+
+
 
 ## What is Stellgin
 This app called Stellgin is a personalized health management system designed for patients with diet-related conditions like obesity, hypertension, and diabetes. It helps patients track their meals, steps, and calorie intake in real time, while enabling doctors to monitor their progress, set consumption limits, and provide tailored dietary advice through a connected dashboard and AI-powered chatbot.
