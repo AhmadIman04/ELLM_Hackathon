@@ -5,7 +5,7 @@
 ![Stellgin intro](https://github.com/user-attachments/assets/ca08a2bd-3bc7-461b-8f7e-b79ada56f7da)
 
 ## UI Snippets  
-### Mobile Application (Patients Side)
+### Mobile Application (Patient's Side)
 
 <table align="center" cellpadding="0" cellspacing="0">
   <tr>
@@ -92,6 +92,25 @@
     </td>
   </tr>
 </table>
+
+
+
+
+
+### Website Interface (Doctor's side)
+![login](https://github.com/user-attachments/assets/b4ae7d79-20c1-4f6f-bdd9-f9b5706b849a)
+![dashboard](https://github.com/user-attachments/assets/ef21db02-e783-4ff7-a81c-d978159bcacd)
+![MyPatients](https://github.com/user-attachments/assets/c5017207-3d20-49c0-9196-b46b54eae016)
+![Ahmad_Bin_Ismail_dashboard](https://github.com/user-attachments/assets/43efe776-1bf5-4762-bad1-6a7d1126d5a4)
+![dietlog](https://github.com/user-attachments/assets/69ba3e74-7c26-4038-a6be-6e675e353a64)
+![steps log](https://github.com/user-attachments/assets/37f3a181-6fc8-4aa1-b448-77c6b54909ba)
+![targets](https://github.com/user-attachments/assets/9b4b382b-917a-4b88-97f0-44cc64e1ae56)
+
+
+
+
+
+
 
 
 
